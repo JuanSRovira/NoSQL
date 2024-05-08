@@ -1,4 +1,5 @@
-const mongoose =  require('mongose')
+const mongoose =  require('mongoose')
+
 
 class Database {
     constructor(){
@@ -6,9 +7,7 @@ class Database {
     }
     async dbConnection(){
         try {
-            await mongoose.connect(this.connection, {
-                useNewUrlParser: true,
-                useUnifiedApology: true
+            mongoose.connect(this.connection, {
             })
             console.log('Conectados a la base de datos')
         } catch (error){

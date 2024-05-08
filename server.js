@@ -1,13 +1,25 @@
 const express = require("express")
 const cors = require("cors")
 //Error mio:  los objetos dentro de 'require' necesitan un ("")
+const Database = require('./db/config')
+
 
 class server {
     constructor(){
         this.app = express()
         this.port = process.env.PORT || 3001
+        this.database = new Database()
+        //middleware
         this.middlewares()
+        //base de datos
+        this.dbConnection()
+        //Especificar rutas
+        this.router()
     }
+
+async dbConnection(){
+    await this.database.dbConnection()
+}
 
     middlewares(){
         //El midleware sirve para recibir datos
@@ -16,6 +28,10 @@ class server {
         this.app.use(express.urlencoded({extended:false}))
         //public
         this.app.use(express.static('public'))
+    }
+
+    router(){
+        this.app.use('/api/usuarios', require('./routes/user.routes'))
     }
 
     listen (){
