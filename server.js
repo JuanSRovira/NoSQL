@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 //Error mio:  los objetos dentro de 'require' necesitan un ("")
 const Database = require('./db/config')
+const  { errors } = require("celebrate")
 
 
 class server {
@@ -32,7 +33,7 @@ async dbConnection(){
     }
 
     router(){
-        this.app.use(this.usersPath, require('./routes/user.routes'))
+        this.app.use(this.usersPath, require('./routes/user.routes'), errors())
     }
 
     listen (){

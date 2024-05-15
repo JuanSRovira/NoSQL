@@ -22,6 +22,12 @@ const UserSchema = Schema({
     active:{
         type: Boolean,
         default: true
+    },
+    inicial:{
+        type: String,
+        default: function() {
+            return this.userName[0]
+        }
     }
 })
 
