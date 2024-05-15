@@ -8,11 +8,9 @@ const createUser = async(req = request, res = response) => {
     const { body } = req;
     const user = new User(body)
     await user.save()
-
-    res.status(201).json({msg:"Usario creado de manera exitosa",
-    user
+    res.status(201).json({msg:"Usario creado de manera exitosa", user
     })
-}catch(error){
+    }catch(error){
     res.status(500).json({
         msg: "Algo inesperado a sucedido"
     })
@@ -28,26 +26,51 @@ const readUser = async (req, res) => {
         const recordLength = await User.countDocuments()
         const user = await User.find(queryParam).limit(Number(limit))
         res.json({
-            recordLength,
-            user
+            recordLength,user
         })
-         } catch (error) {
+        } catch (error) {
         res.status(500).json({
             msg: "Algo inesperado sucedio al leer al usuario"
         })
     }
-    res.json({msg: "Leer usuarios desde el controller"}) 
+    //Aparecio un error comun de NodeJS debido a que habian 2 codigos de
+    //mensaje, es decir, 2 const res.json msg: algo
 }
 
-const updateUser = (req = request, res) => {
-    const {params, query} = req
-    console.log(query)
-    console.log(params)
-    res.json({ msg: "Actualizar usuario desde el controller"})
+const updateUser = async(req = request, res) => {
+    try {
+        const {params, body} = req
+        const { userId } = params
+        user = await User.findByIdAndUpdate(userId, body)
+        const userToShow = await User.findById(userId)
+
+        res.status(202).json({
+            msg: "El usuario se modifico con exito", userToShow
+            })
+    } catch (error) {
+        res.status(500).json({
+            msg: "Un error a ocurrido al actualizar el usuario"
+        })
+    }
+
 }
 
-const deleteUser = (req, res) => {
-    res.json({ msg: "Borrar usuario desde el controller"})
+//Este borrado es uno total, lo cual muchas veces es complicado, por lo que se recomienda el borrado logico
+//Que es cambiar el estado de true a false en el registro booleano
+
+const deleteUser = async (req = request, res = response)  => {
+    try {
+        const {userId} = req.params
+        const deleteState = {"active": false}
+        // const user =  await User.findByIdAndDelete(userId) 
+        await User.findByIdAndUpdate(userId, deleteState) //BORRADO LOGICO 
+        const userToShow = await User.findById(userId)
+        res.status(202).json({ msg: "Se borro el registro", userToShow})
+    } catch (error) {
+        res.status(500).json({
+            msg: "A ocurrido un error al borrar el usuario"
+        })
+    }
 }
 
 module.exports = {

@@ -25,4 +25,9 @@ const UserSchema = Schema({
     }
 })
 
+UserSchema.method('getInitial', function(){
+    return this.userName[0]
+    
+})
+
 module.exports = model('User', UserSchema)
