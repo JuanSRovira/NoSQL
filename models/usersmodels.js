@@ -4,7 +4,8 @@ const UserSchema = Schema({
     userName:{
         type: String,
         required: [true, "El username es obligatorio"],
-        unique: true
+        unique: true,
+        enum: ['NORMAL', 'PREMIUM']
     },
     email:{
         type: String,
@@ -28,7 +29,19 @@ const UserSchema = Schema({
         default: function() {
             return this.userName[0]
         }
+    },
+    service: {
+        type: Schema.Types.ObjectId,
+        ref: 'Service'
     }
+})
+
+UserSchema.pre('save', async function (next) {
+    if (!this.service){
+        const defaultService = await Service.findOne({name: 'NORMAL'})
+        this.service = defaultService._id
+    }
+    next()
 })
 
 UserSchema.method('getInitial', function(){
