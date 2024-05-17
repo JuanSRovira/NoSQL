@@ -1,4 +1,5 @@
 const { Schema, model } = require ("mongoose")
+const Service = require('./service.models')
 
 const UserSchema = Schema({
     userName:{
@@ -36,7 +37,7 @@ const UserSchema = Schema({
     }
 })
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function(next) {
     if (!this.service){
         const defaultService = await Service.findOne({name: 'NORMAL'})
         this.service = defaultService._id

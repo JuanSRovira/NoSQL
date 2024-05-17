@@ -24,24 +24,25 @@ const readUser = async (req, res) => {
         const { limit = 10 } = req.query
         const queryParam = { active:true }
         const recordLength = await User.countDocuments()
-        const user = await User.find(queryParam).limit(Number(limit))
+        const user = await User.find(queryParam).limit(Number(limit)).populate("service")
         res.json({
-            recordLength,user
+            recordLength, user
         })
         } catch (error) {
         res.status(500).json({
-            msg: "Algo inesperado sucedio al leer al usuario"
+            msg: "Algo inesperado sucedio al leer al usuario", error
         })
     }
     //Aparecio un error comun de NodeJS debido a que habian 2 codigos de
-    //mensaje, es decir, 2 const res.json msg: algo
+    //mensaje, es decir, 2 const res.json msg: something
 }
 
 const updateUser = async(req = request, res) => {
     try {
         const {params, body} = req
         const { userId } = params
-        user = await User.findByIdAndUpdate(userId, body)
+
+        await User.findByIdAndUpdate(userId, body)
         const userToShow = await User.findById(userId)
 
         res.status(202).json({

@@ -20,6 +20,7 @@ const schema = Joi.object().keys({
         "string.empty": "La contraseña no debe estar vacia",
         "string.min": "La contraseña debe tener al menos {#limit} caracteres"
     }),
+    service: Joi.string()
 })
 
 module.exports = { schema }

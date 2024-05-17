@@ -11,6 +11,7 @@ class server {
         this.port = process.env.PORT || 3001
         this.database = new Database()
         this.usersPath = '/api/usuarios'
+        this.servicePath = '/api/services'
         //middleware
         this.middlewares()
         //base de datos
@@ -34,6 +35,7 @@ async dbConnection(){
 
     router(){
         this.app.use(this.usersPath, require('./routes/user.routes'), errors())
+        this.app.use(this.servicePath, require('./routes/services.routes'))
     }
 
     listen (){

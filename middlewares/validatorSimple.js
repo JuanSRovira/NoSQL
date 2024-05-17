@@ -2,6 +2,8 @@ function validatePost (schema) {
 // PARA SER UN MIDDLEWARE DEBE TENER 3 VALORES (REQ, RES, NEXT)
     return (req, res, next) => {
         const { error } = schema.validate(req.body)
+
+        
         if (error) {
             return res.status(403).json({
                 msg: error.details[0].message
