@@ -1,6 +1,7 @@
 const { response, request } = require('express')
 const User = require('../models/usersmodels')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const registerUser = async (req = request, res = response) => {
     try {
@@ -30,6 +31,34 @@ const registerUser = async (req = request, res = response) => {
     }
 }
 
+const loginUser = async (req = request, res = response) => {
+    const { userName, password } = req.body
+    
+    const user = await User.findOne({  userName })
+    if(!user) {
+        return res.status(403).json({
+            msg: "El usuario no fue encontrado"
+        })
+    }
+
+    const correctPassword = bcrypt.compareSync( password, user.password)
+
+    if(correctPassword) {
+        const token = jwt.sign({ id: user._id, userName: user.userName}, "cambiame-por-algo-seguro")
+        res.status(200).json({
+            token
+        })
+    } else {
+        res.status(403).json({
+            msg: "La contraseña es incorrecta"
+        })
+    }
+
+}
+
+
+
 module.exports = {
-    registerUser
+    registerUser, 
+    loginUser
 }

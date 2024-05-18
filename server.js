@@ -12,7 +12,7 @@ class server {
         this.database = new Database()
         this.usersPath = '/api/usuarios'
         this.servicePath = '/api/services'
-        this.registerPath = '/api/register'
+        this.registerPath = '/api/auth'
         //middleware
         this.middlewares()
         //base de datos
