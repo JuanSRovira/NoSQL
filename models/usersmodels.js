@@ -1,12 +1,23 @@
 const { Schema, model } = require ("mongoose")
 const Service = require('./service.models')
 
+const AddressSchema = Schema ({
+    street: {
+        type: String
+    },
+    number: {
+        type: Number
+    },
+    city: {
+        type: String
+    }
+})
+
 const UserSchema = Schema({
     userName:{
         type: String,
         required: [true, "El username es obligatorio"],
         unique: true,
-        enum: ['NORMAL', 'PREMIUM']
     },
     email:{
         type: String,
@@ -14,8 +25,7 @@ const UserSchema = Schema({
         unique: true
     },
     phoneNumber:{
-        type: Number,
-        required: [true, "El numero telefonico es obligatorio"]
+        type: Number
     },
     password:{
         type: String,
@@ -34,12 +44,16 @@ const UserSchema = Schema({
     service: {
         type: Schema.Types.ObjectId,
         ref: 'Service'
-    }
+    },
+    address: {
+        type: AddressSchema,
+    },
 })
 
 UserSchema.pre('save', async function(next) {
     if (!this.service){
         const defaultService = await Service.findOne({name: 'NORMAL'})
+        console.log(defaultService)
         this.service = defaultService._id
     }
     next()
