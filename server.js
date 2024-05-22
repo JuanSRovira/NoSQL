@@ -13,6 +13,7 @@ class server {
         this.usersPath = '/api/usuarios'
         this.servicePath = '/api/services'
         this.registerPath = '/api/auth'
+        this.authPath = '/api/admin'
         //middleware
         this.middlewares()
         //base de datos
@@ -38,6 +39,7 @@ async dbConnection(){
         this.app.use(this.usersPath, require('./routes/user.routes'), errors())
         this.app.use(this.servicePath, require('./routes/services.routes'))
         this.app.use(this.registerPath, require('./routes/register.routes'))
+        this.app.use(this.authPath, require('./routes/auth.routes'))
     }
 
     listen (){

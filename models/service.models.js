@@ -4,7 +4,7 @@ const ServiceSchema = new Schema ({
     name: {
         type: String,
         required: true,
-        enum: ['NORMAL', 'PREMIUM']
+        enum: ['NORMAL', 'PREMIUM', 'PLUS']
     },
     active: {
         type: Boolean,

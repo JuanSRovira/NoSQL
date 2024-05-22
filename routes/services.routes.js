@@ -6,10 +6,11 @@ const {
     serviceUpdate,
     serviceDelete
 } = require('../controllers/serviceController')
+const { validarJWT } = require('../middlewares/validar-jwt')
 
 const router = Router()
 
-router.post("/", servicePost)
+router.post("/", validarJWT, servicePost)
 router.get("/", serviceGet)
 router.put("/;id", serviceUpdate)
 router.delete("/:id", serviceDelete)
